@@ -1,5 +1,6 @@
 package com.cindytech.isecure.ui.settings;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,29 +20,27 @@ import com.cindytech.isecure.databinding.FragmentSettingsBinding;
 import com.cindytech.isecure.db.SettingsDB;
 import com.cindytech.isecure.model.Model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
     final private static String ID = "1";
-
 
     //references to buttons and other controls on the layout
     Button btn_save;
     EditText et_number, et_arm, et_disarm, et_night, et_day, et_status, et_enable, et_disable, et_time, et_password;
     SettingsDB settingsDB ;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        SettingsViewModel settingsViewModel =
-                new ViewModelProvider(this).get(SettingsViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SettingsViewModel settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         settingsDB = new SettingsDB(SettingsFragment.this);
-        Log.d("SETTINGS", "1");
 
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Log.d("SETTINGS", "2");
         //List all components
         btn_save = binding.btnSave.findViewById(R.id.btn_save);
         et_number = binding.etNumber.findViewById(R.id.et_number);
@@ -55,25 +54,10 @@ public class SettingsFragment extends Fragment {
         et_time = binding.etTime.findViewById(R.id.et_time);
         et_password = binding.etPassword.findViewById(R.id.et_password);
 
-        Log.d("SETTINGS", "3");
-
         Cursor res = settingsDB.uploadSettings();
 
         if (res != null) {
-
-            Log.d("SETTINGS", "4");
             while (res.moveToNext()) {
-                Log.d("ID ", res.getString(0));
-                Log.d("NUMBER ", res.getString(1));
-                Log.d("ARM ", res.getString(2));
-                Log.d("DISARM ", res.getString(3));
-                Log.d("NIGHT ", res.getString(4));
-                Log.d("DAY ", res.getString(5));
-                Log.d("STATUS ", res.getString(6));
-                Log.d("ENABLE ", res.getString(7));
-                Log.d("DISABLE ", res.getString(8));
-                Log.d("TIME ", res.getString(9));
-                Log.d("PASSOWRD ", res.getString(10));
 
                 Model model = new Model();
 
@@ -89,8 +73,6 @@ public class SettingsFragment extends Fragment {
                 model.setTime(res.getString(9));
                 model.setPassword(res.getString(10));
 
-                Log.d("Model to String", model.toString());
-
                 et_number.setText(model.getNumber());
                 et_arm.setText(model.getArm());
                 et_disarm.setText(model.getDisarm());
@@ -103,7 +85,6 @@ public class SettingsFragment extends Fragment {
                 et_password.setText(model.getPassword());
             }
         }
-
 
         //button listeners
         btn_save.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +99,11 @@ public class SettingsFragment extends Fragment {
                  String status = et_status.getText().toString();
                  String enable = et_enable.getText().toString();
                  String disable = et_disable.getText().toString();
-                 String time = et_time.getText().toString();
+
+                 @SuppressLint("SimpleDateFormat") String currentTime = new SimpleDateFormat("HH:mm").format(new Date());
+                 String time = "TIME " +currentTime;
+
+                 //String time = et_time.getText().toString();
                  String password = et_password.getText().toString();
 
                  Model model;
@@ -139,8 +124,6 @@ public class SettingsFragment extends Fragment {
                  }
              }
          });
-        //final TextView textView = binding.textDashboard;
-        //settingsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
        return root;
     }
 

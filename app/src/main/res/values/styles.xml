@@ -22,7 +22,7 @@
     </style>
 
 
-    <style name="MyButton2"
+    <style name="btn_arm"
         parent="Theme.AppCompat.Light">
         <item name="colorControlHighlight">
             @color/red</item>

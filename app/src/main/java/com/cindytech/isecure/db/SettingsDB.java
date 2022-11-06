@@ -66,6 +66,7 @@ public class SettingsDB extends SQLiteOpenHelper {
 
         @SuppressLint("SimpleDateFormat") String currentTime = new SimpleDateFormat("HH:mm").format(new Date());
         String time = "TIME " +currentTime;
+        model.setTime(time);
         Log.d("koha", time);
 
         /*
@@ -81,7 +82,7 @@ public class SettingsDB extends SQLiteOpenHelper {
         cv.put(COLUMN_MODEL_STATUS, model.getStatus());
         cv.put(COLUMN_MODEL_ENABLE, model.getEnable());
         cv.put(COLUMN_MODEL_DISABLE, model.getDisable());
-        cv.put(COLUMN_MODEL_TIME, time);
+        cv.put(COLUMN_MODEL_TIME, model.getTime());
         cv.put(COLUMN_MODEL_PASSWORD, model.getPassword());
 
         String ID = "1";

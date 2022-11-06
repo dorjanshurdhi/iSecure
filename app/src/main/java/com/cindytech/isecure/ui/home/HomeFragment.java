@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment {
     DayNightSwitch dayNightSwitch;
     View backgroundView;
     TextView tv_day_night;
-    Button btn_arm, btn_disarm, btn_status, btn_enable, btn_disable;
+    Button btn_arm, btn_disarm, btn_status, btn_enable, btn_disable, btn_time;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -223,6 +223,27 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //TIME Button Action
+        btn_time = binding.btnTime.findViewById(R.id.btn_time);
+        btn_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.SEND_SMS) ==
+                        PackageManager.PERMISSION_GRANTED){
+                    //When permission is granted
+                    //Create method
+                    //Get data from DB
+                    Model model = getModel();
+                    String sPhone = model.getNumber();
+                    String command = model.getTime();
+                    sendMessage(sPhone, command);
+                } else {
+                    //When permission is not granted
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, 100);
+                }
+            }
+        });
 
         return root;
     }
